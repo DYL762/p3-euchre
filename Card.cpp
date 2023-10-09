@@ -91,7 +91,6 @@ std::istream & operator>>(std::istream &is, Suit &suit) {
 
 /////////////// Write your implementation for Card below ///////////////
 
-
 // NOTE: We HIGHLY recommend you check out the operator overloading
 // tutorial in the project spec before implementing
 // the following operator overload functions:
@@ -103,3 +102,202 @@ std::istream & operator>>(std::istream &is, Suit &suit) {
 //   operator>=
 //   operator==
 //   operator!=
+
+Card::Card():rank(TWO), suit (SPADES){}
+
+Card::Card(Rank rank_in, Suit suit_in):
+rank(rank_in), suit(suit_in){}
+
+Rank Card::get_rank() const{
+  return rank;
+}
+
+Suit Card::get_suit() const{
+  return suit;
+}
+
+Suit Card::get_suit(Suit trump) const{
+  if (is_left_bower(trump)){
+    return trump;
+  }
+  else{
+    return suit;
+  }
+}
+
+bool Card::is_face_or_ace() const{
+  if (rank == JACK||rank == QUEEN||
+  rank == KING||rank == ACE){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool Card::is_right_bower(Suit trump) const{
+  if (rank == JACK && suit == trump){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool Card::is_left_bower(Suit trump) const{
+  if (rank == JACK){
+    return (trump == SPADES && suit == CLUBS)||(trump == CLUBS && suit == SPADES)
+    ||(trump == HEARTS && suit == DIAMONDS) || (trump == DIAMONDS && suit == HEARTS);
+  }
+  else{
+    return false;
+  } 
+}
+
+bool Card::is_trump(Suit trump) const{
+  if (is_left_bower(trump)||suit == trump){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+std::ostream & operator<<(std::ostream &os, const Card &card){
+  os << card.get_rank() << " of " << card.get_suit();
+  return os;
+}
+
+std::istream & operator>>(std::istream &is, Card &card){
+  string rank;
+  string junk;
+  string suit;
+  is >> rank >> junk >> suit;
+  card.rank = string_to_rank(rank);
+  card.suit = string_to_suit(suit);
+  return is;
+}
+
+bool operator<(const Card &lhs, const Card &rhs){
+  if (lhs.get_rank() < rhs.get_rank()){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool operator<=(const Card &lhs, const Card &rhs){
+  if (lhs < rhs){
+    return true;
+  }
+  else if (lhs == rhs){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool operator>(const Card &lhs, const Card &rhs){
+  if (lhs.get_rank() > rhs.get_rank()){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool operator>=(const Card &lhs, const Card &rhs){
+  if (lhs > rhs){
+    return true;
+  }
+  else if (lhs == rhs){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool operator==(const Card &lhs, const Card &rhs){
+  if (lhs.get_suit() == rhs.get_suit() &&
+  lhs.get_rank() == rhs.get_rank()){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+bool operator!=(const Card &lhs, const Card &rhs){
+  if (lhs.get_suit() != rhs.get_suit() ||
+  lhs.get_rank() != rhs.get_rank()){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+Suit Suit_next(Suit suit){
+  if (suit == SPADES){
+    return CLUBS;
+  }
+  else if (suit == CLUBS){
+    return SPADES;
+  }
+  else if(suit == HEARTS){
+    return DIAMONDS;
+  }
+  else{
+    return HEARTS;
+  }
+}
+
+bool Card_less(const Card &a, const Card &b, Suit trump){
+  if (a < b && a.get_suit() != trump){
+    return true;
+  }
+  else if(a > b && b.get_suit() == trump){
+    return true;
+  }
+  else if (a.get_rank()==b.get_rank()){
+    if(a.get_suit(trump) == trump && b.get_suit() == trump){
+      return true;
+    }
+    else if(a.get_suit() != trump && b.get_suit() == trump){
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Card_less(const Card &a, const Card &b, const Card &led_card, Suit trump){
+  if (a < b && (a.get_suit() != trump && 
+  a.get_suit() != led_card.get_suit())){
+    return true;
+  }
+  else if(a > b && (b.get_suit() == trump ||
+  b.get_suit() == led_card.get_suit())){
+    return true;
+  }
+  else if (a.get_rank()==b.get_rank()){
+    if(a.get_suit(trump) == trump && b.get_suit() == trump){                                                                                                                          
+      return true;
+    }
+    else if(a.get_suit() == led_card.get_suit() 
+    && b.get_suit() == trump){
+      return true;
+    }
+    else if (a.get_suit() != trump && (b.get_suit() == trump ||
+    b.get_suit() == led_card.get_suit()))
+    {
+      if (!(a == b))
+      {
+        return true;
+      }
+    }
+  }
+  return false;
+}
