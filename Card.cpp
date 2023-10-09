@@ -275,23 +275,23 @@ bool Card_less(const Card &a, const Card &b, Suit trump){
 
 bool Card_less(const Card &a, const Card &b, const Card &led_card, Suit trump){
   if (a < b && (a.get_suit() != trump && 
-  a.get_suit() != led_card.get_suit())){
+  a.get_suit() != led_card.get_suit())){//checks a is not trump or led
     return true;
   }
   else if(a > b && (b.get_suit() == trump ||
-  b.get_suit() == led_card.get_suit())){
+  b.get_suit() == led_card.get_suit())){//checks b is not trump or led
     return true;
   }
   else if (a.get_rank()==b.get_rank()){
-    if(a.get_suit(trump) == trump && b.get_suit() == trump){                                                                                                                          
+    if(a.get_suit(trump) == trump && b.get_suit() == trump){//if a is left bower                                                                                                                          
       return true;
     }
-    else if(a.get_suit() == led_card.get_suit() 
+    else if(a.get_suit() == led_card.get_suit()//if a is led but b is trump
     && b.get_suit() == trump){
       return true;
     }
     else if (a.get_suit() != trump && (b.get_suit() == trump ||
-    b.get_suit() == led_card.get_suit()))
+    b.get_suit() == led_card.get_suit()))//general cases
     {
       if (!(a == b))
       {
