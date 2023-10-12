@@ -259,7 +259,8 @@ bool Card_less(const Card &a, const Card &b, Suit trump){
   if (a < b && a.get_suit() != trump){
     return true;
   }
-  else if(a > b && b.get_suit() == trump){
+  else if(a > b && 
+  (b.get_suit() == trump && a.get_suit() != trump)){
     return true;
   }
   else if (a.get_rank()==b.get_rank()){
