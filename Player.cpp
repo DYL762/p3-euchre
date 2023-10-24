@@ -44,7 +44,7 @@ class SimplePlayer: public Player{
             ++f_or_aT;
           }
         }
-        if (f_or_aT >= 1){
+        if (f_or_aT > 1){
           order_up_suit = upcard.get_suit();
           return true;
         }
