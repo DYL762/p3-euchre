@@ -217,31 +217,24 @@ class HumanPlayer: public Player{
 
     void add_and_discard(const Card &upcard) override{
       print_hand();
-      Card card;
+      int card_num;
       std::cout << "Discard upcard: [-1]\n";
       std::cout << "Human player " << name << ", please select a card to discard:\n";
-      std::cin >> card;
-      int index;
-      for (int i = 0; i < hand.size(); ++i){
-        if (hand.at(i) == card){
-          index = i;
-        }
+      std::cin >> card_num;
+      if (card_num >= 0)
+      {
+        hand.erase(hand.begin() + card_num);
       }
-      hand.erase(hand.begin() + index);
     }
 
     Card lead_card(Suit trump) override{
       print_hand();
-      int index;
+      int card;
       Card cardin;
       std::cout << "Human player " << name << ", please select a card:\n";
-      std::cin >> cardin;
-      for (int i = 0; i < hand.size(); ++i){
-        if (hand.at(i) == cardin){
-          index = i;
-        }
-      }
-      hand.erase(hand.begin() + index);
+      std::cin >> card;
+      cardin = hand.at(card);
+      hand.erase(hand.begin() + card);
       return cardin;
     };
 
